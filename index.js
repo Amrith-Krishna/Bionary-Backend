@@ -6,6 +6,8 @@ import mongoose from "mongoose";
 import cors from "cors";
 import * as dotenv from "dotenv";
 
+//OTHER FILES
+import { adminLogin } from "./Login/AdminLogin.js";
 
 //CONFIG
 dotenv.config();
@@ -21,24 +23,21 @@ app.use(cors(corsOptions));
 app.use(bodyParser.json());
 app.use(cookieParser(COOKIE_SECRET));
 
-
 //CONNECT TO MONGODB
 mongoose
   .connect(URI, { useUnifiedTopology: true })
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.error("MongoDB connection error:", err));
 
-
 //LOGIN ROUTES
-app.post("/ffcs-login",FFCS_Login) 
+app.post("/ffcs-login", FFCS_Login);
 //REQ: {regNumber: "12ABC1234", password: "password"} //RES: {message: "message", success: true}, JWT
-app.post("/admin-login",Admin_Login) 
+app.post("/admin-login", adminLogin);
 //REQ: {regNumber: "12ABC1234", password: "password"} //RES: {message: "message", success: true}, JWT
 
 //ADMIN ROUTES
-app.post("/admin/add-ffcs-member",Authenticate_Admin,Add_FFCS_Member)
-app.post("/admin/add-event",Authenticate_Admin, Add_Event)
-
+app.post("/admin/add-ffcs-member", Authenticate_Admin, Add_FFCS_Member);
+app.post("/admin/add-event", Authenticate_Admin, Add_Event);
 
 //START SERVER
 app.listen(PORT, () => {
