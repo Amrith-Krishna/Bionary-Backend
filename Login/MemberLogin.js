@@ -14,7 +14,9 @@ export const memberLogin = async (req, res) => {
   //CHECK IF MEMBER EXISTS
   const foundMember = await Member.findOne({ regNumber });
   if (!foundMember)
-    return res.status(400).json({ message: "Member Not Found", success: false });
+    return res
+      .status(400)
+      .json({ message: "Member Not Found", success: false });
 
   //CHECK PASSWORD
   if (!bcrypt.compare(password, foundMember.password))

@@ -8,6 +8,7 @@ import * as dotenv from "dotenv";
 
 //OTHER FILES
 import { adminLogin } from "./Login/AdminLogin.js";
+import { memberLogin } from "./Login/MemberLogin.js";
 
 //CONFIG
 dotenv.config();
@@ -30,7 +31,7 @@ mongoose
   .catch((err) => console.error("MongoDB connection error:", err));
 
 //LOGIN ROUTES
-app.post("/ffcs-login", FFCS_Login);
+app.post("/member-login", memberLogin);
 //REQ: {regNumber: "12ABC1234", password: "password"} //RES: {message: "message", success: true}, JWT
 app.post("/admin-login", adminLogin);
 //REQ: {regNumber: "12ABC1234", password: "password"} //RES: {message: "message", success: true}, JWT
