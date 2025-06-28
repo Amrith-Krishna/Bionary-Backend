@@ -30,8 +30,10 @@ mongoose
 
 
 //LOGIN ROUTES
-app.post("/ffcs-login",FFCS_Login)
-app.post("/admin-login",Admin_Login)
+app.post("/ffcs-login",FFCS_Login) 
+//REQ: {regNumber: "12ABC1234", password: "password"} //RES: {message: "message", success: true}, JWT
+app.post("/admin-login",Admin_Login) 
+//REQ: {regNumber: "12ABC1234", password: "password"} //RES: {message: "message", success: true}, JWT
 
 //ADMIN ROUTES
 app.post("/admin/add-ffcs-member",Authenticate_Admin,Add_FFCS_Member)
