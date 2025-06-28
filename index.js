@@ -9,7 +9,7 @@ import * as dotenv from "dotenv";
 
 //CONFIG
 dotenv.config();
-const { URI, PORT } = process.env;
+const { URI, PORT, COOKIE_SECRET } = process.env;
 const corsOptions = {
   origin: "*", //SET TO WEBSITE URL
   credentials: true,
@@ -19,7 +19,7 @@ const corsOptions = {
 const app = express();
 app.use(cors(corsOptions));
 app.use(bodyParser.json());
-app.use(cookieParser());
+app.use(cookieParser(COOKIE_SECRET));
 
 
 //CONNECT TO MONGODB
