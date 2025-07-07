@@ -4,7 +4,7 @@ dotenv.config();
 
 const { SECRET_ACCESS_KEY } = process.env;
 
-export const Generate_JWT_Cookie = (_id, role) => {
+export const generateJWTCookie = (_id, role) => {
   const cookie = jwt.sign({ _id, role }, SECRET_ACCESS_KEY, {
     expiresIn: "15m",
   });

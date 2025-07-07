@@ -8,7 +8,9 @@ import * as dotenv from "dotenv";
 
 //OTHER FILES
 import { adminLogin } from "./Login/AdminLogin.js";
-import { memberLogin } from "./Login/MemberLogin.js";
+import { userLogin } from "./Login/userLogin.js";
+import { authenticateAdmin } from "./Authentication/authenticateAdmin.js";
+import { authenticateUser } from "./Authentication/authenticateUser.js";
 
 //CONFIG
 dotenv.config();
@@ -31,14 +33,17 @@ mongoose
   .catch((err) => console.error("MongoDB connection error:", err));
 
 //LOGIN ROUTES
-app.post("/member-login", memberLogin);
+app.post("/user-login", userLogin);
 //REQ: {regNumber: "12ABC1234", password: "password"} //RES: {message: "message", success: true}, JWT
 app.post("/admin-login", adminLogin);
 //REQ: {regNumber: "12ABC1234", password: "password"} //RES: {message: "message", success: true}, JWT
 
 //ADMIN ROUTES
-app.post("/admin/add-ffcs-member", Authenticate_Admin, Add_FFCS_Member);
-app.post("/admin/add-event", Authenticate_Admin, Add_Event);
+app.post("/admin/add-user", authenticateAdmin, addUser); //NOT IMPLEMENTED
+app.post("/admin/add-project", authenticateAdmin, addProject); //NOT IMPLEMENTED
+app.post("/admin/modify-project", authenticateAdmin, modifyProject); //NOT IMPLEMENTED
+
+//USER ROUTES
 
 //START SERVER
 app.listen(PORT, () => {

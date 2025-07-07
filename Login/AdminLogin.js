@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
 import { Admin } from "../Schema/Admin.js";
-import { Generate_JWT_Cookie } from "../Authentication/GenerateJWT.js";
+import { generateJWTCookie } from "../Authentication/GenerateJWT.js";
 
 export const adminLogin = async (req, res) => {
   const { regNumber, password } = req.body;
@@ -27,7 +27,7 @@ export const adminLogin = async (req, res) => {
     { regNumber },
     { ...foundUser, lastLogin: new Date() }
   );
-  const { cookie, config } = Generate_JWT_Cookie(foundAdmin._id, "Admin");
+  const { cookie, config } = generateJWTCookie(foundAdmin._id, "Admin");
   return res
     .cookie(cookie, config)
     .json({ message: "Login Successful", success: true });
