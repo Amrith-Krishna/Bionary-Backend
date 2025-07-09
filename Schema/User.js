@@ -11,7 +11,9 @@ const userSchema = new mongoose.Schema({
     commits: Number,
     pullRequests: Number,
     issuesResolved: Number
-  }]
+  }],
+  leaderboardPoints: {type: Number, default: 0},
+  department: String
 });
 
 export const User = mongoose.model("User", userSchema);

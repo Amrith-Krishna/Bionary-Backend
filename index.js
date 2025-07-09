@@ -11,6 +11,7 @@ import { adminLogin } from "./Login/AdminLogin.js";
 import { userLogin } from "./Login/userLogin.js";
 import { authenticateAdmin } from "./Authentication/authenticateAdmin.js";
 import { authenticateUser } from "./Authentication/authenticateUser.js";
+import { setPoints } from "./Admin/setPoints.js";
 
 //CONFIG
 dotenv.config();
@@ -42,8 +43,12 @@ app.post("/admin-login", adminLogin);
 app.post("/admin/add-user", authenticateAdmin, addUser); //NOT IMPLEMENTED
 app.post("/admin/add-project", authenticateAdmin, addProject); //NOT IMPLEMENTED
 app.post("/admin/modify-project", authenticateAdmin, modifyProject); //NOT IMPLEMENTED
+app.post("/admin/set-points",authenticateAdmin, setPoints); //REQ: JWT, {target: RegNumber of User, points: Integer}
 
 //USER ROUTES
+app.post("/user/get-leaderboard",authenticateUser, getLeaderboard); 
+//REQ: JWT, {filterDepartment: Optional} 
+//RES: {leaderboard: Array of User{name, regnumber, points, rank}} in ascending order rank 1,2,3...
 
 //START SERVER
 app.listen(PORT, () => {
