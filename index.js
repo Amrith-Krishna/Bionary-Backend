@@ -43,7 +43,7 @@ app.post("/admin-login", adminLogin);
 app.post("/admin/add-user", authenticateAdmin, addUser); //NOT IMPLEMENTED
 app.post("/admin/add-project", authenticateAdmin, addProject); //NOT IMPLEMENTED
 app.post("/admin/modify-project", authenticateAdmin, modifyProject); //NOT IMPLEMENTED
-app.post("/admin/add-event", authenticateAdmin, addEvent)
+app.post("/admin/add-event", authenticateAdmin, addEvent); //NOT IMPLEMENTED
 app.post("/admin/set-points",authenticateAdmin, setPoints); 
 //REQ: JWT, {target: RegNumber of User, points: Integer}
 
