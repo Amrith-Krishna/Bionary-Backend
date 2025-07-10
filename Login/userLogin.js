@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
-import { User } from "../Schema/User";
-import { generateJWTCookie } from "../Authentication/GenerateJWT";
+import { User } from "../Schema/User.js";
+import { generateJWTCookie } from "../Authentication/GenerateJWT.js";
 
 export const userLogin = async (req, res) => {
   const { regNumber, password } = req.body;
@@ -14,19 +14,38 @@ export const userLogin = async (req, res) => {
   //CHECK IF USER EXISTS
   const foundUser = await User.findOne({ regNumber });
   if (!foundUser)
-    return res
-      .status(400)
-      .json({ message: "User Not Found", success: false });
+    return res.status(400).json({ message: "User Not Found", success: false });
 
+  if (foundUser.failedLoginAttemptsToday >= 5) {
+    return res.status(401).json({
+      message: "Too Many Failed Login Attempts Today. Try Again Tomorrow.",
+      success: false,
+    });
+  }
+
+  const match = await bcrypt.compare(password, foundUser.password);
   //CHECK PASSWORD
-  if (!bcrypt.compare(password, foundUser.password))
+  if (!match) {
+    await User.findOneAndUpdate(
+      { regNumber: foundUser.regNumber },
+      { failedLoginAttemptsToday: foundUser.failedLoginAttemptsToday + 1 }
+    );
     return res
       .status(401)
       .json({ message: "Incorrect Password", success: false });
+  }
 
   //SUCCESSFUL LOGIN
-  const { cookie, config } = generateJWTCookie(foundUser._id, "User");
+  await User.findOneAndUpdate(
+    { regNumber: foundUser.regNumber },
+    { lastLogin: new Date(), failedLoginAttemptsToday: 0 }
+  );
+  const { cookie, config } = generateJWTCookie(
+    foundUser._id,
+    "User",
+    regNumber
+  );
   return res
-    .cookie(cookie, config)
+    .cookie("auth", cookie, config)
     .json({ message: "Login Successful", success: true });
 };

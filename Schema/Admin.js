@@ -3,9 +3,9 @@ import mongoose from "mongoose";
 const adminSchema = new mongoose.Schema({
   name: String,
   regNumber: String,
-  memberID: { type: mongoose.Schema.Types.ObjectId, ref: "Member" }, //IF ANY
-  position: String,
+  password: String,
   lastLogin: Date,
+  failedLoginAttemptsToday: { type: Number, default: 0 },
 });
 
 export const Admin = mongoose.model("Admin", adminSchema);

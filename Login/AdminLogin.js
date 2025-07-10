@@ -15,20 +15,34 @@ export const adminLogin = async (req, res) => {
   const foundAdmin = await Admin.findOne({ regNumber });
   if (!foundAdmin)
     return res.status(400).json({ message: "Admin Not Found", success: false });
-
+  if (foundAdmin.failedLoginAttemptsToday >= 5) {
+    return res.status(401).json({
+      message: "Too Many Failed Login Attempts Today. Try Again Tomorrow.",
+      success: false,
+    });
+  }
   //CHECK PASSWORD
-  if (!bcrypt.compare(password, foundAdmin.password))
+  const match = await bcrypt.compare(password, foundAdmin.password);
+  if (!match) {
+    await Admin.findOneAndUpdate(
+      { regNumber: foundAdmin.regNumber },
+      { failedLoginAttemptsToday: foundAdmin.failedLoginAttemptsToday + 1 }
+    );
     return res
       .status(401)
       .json({ message: "Incorrect Password", success: false });
-
+  }
   //SUCCESSFUL LOGIN
   Admin.findOneAndUpdate(
     { regNumber },
-    { ...foundUser, lastLogin: new Date() }
+    { lastLogin: new Date(), failedLoginAttemptsToday: 0 }
   );
-  const { cookie, config } = generateJWTCookie(foundAdmin._id, "Admin");
+  const { cookie, config } = generateJWTCookie(
+    foundAdmin._id,
+    "Admin",
+    regNumber
+  );
   return res
-    .cookie(cookie, config)
+    .cookie("auth", cookie, config)
     .json({ message: "Login Successful", success: true });
 };

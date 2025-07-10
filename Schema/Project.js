@@ -10,7 +10,7 @@ const projectSchema = new mongoose.Schema({
   pullRequests: Number,
   status: String,
   teamMembers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
-  topContributor: { type: mongoose.Schema.Types.ObjectId, ref: "User" }
+  topContributor: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
 });
 
 export const Project = mongoose.model("Project", projectSchema);
